@@ -1,10 +1,12 @@
 import pandas as pd
 from datetime import datetime, time, timedelta
 
-k = 5
+import main
+
+tarifasegura_tecto_simples = 0.1329
+tarifasegura_chao_simples = 0.0729
 tar = -0.0121
-price_ceiling = 0.1329
-price_floor = 0.0729
+
 
 def calc_cgs(row):
     cgs = (row['encargos_regulacao'] + row['encargos_restricoes_pdbf'] + row['encargos_restricoes_tempo_real'] + row[
@@ -23,7 +25,6 @@ def calc_price(row):
 def calc_cost(row):
     cost = calc_price(row) * row['curva_carga'] + (tar * row['curva_carga'] * 1000)
     return cost
-
 
 ezu = pd.read_csv('data/ezu/20230927132640_2023-07-30_2023-08-06_12448.csv', encoding="ISO-8859-1", skiprows=3,
                   skipfooter=9, delimiter=';', quotechar='"', engine='python', decimal=',')
@@ -76,3 +77,6 @@ ezu_slice = ezu_df.loc['2023-07-30 00:00':'2023-08-07 00:00']
 print("Consumo :", '{:.0f}'.format(ezu_slice.curva_carga.sum()*1000))
 print("Custo :", '{:.2f}'.format(calc_cost(ezu_slice).sum()))
 print("Preço Medio kWh :", '{:.6f}'.format(calc_cost(ezu_slice).sum() / ezu_slice.curva_carga.sum() / 1000))
+
+
+# convert the above to golang
