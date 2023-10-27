@@ -14,7 +14,7 @@ def load_perfil(source: str = fileurl):
         index=pd.to_datetime([], utc=True))
 
     print(f"Reading usage profiles from {source}")
-    file = pd.read_excel(source, skiprows=3)
+    file = pd.read_excel(source, skiprows=4)
 
 
     for index, row in file.iterrows():

@@ -20,13 +20,13 @@ def calc_perdas(row):
 
 def calc_price(row):
     price = (row['preco_omie'] + calc_cgs(row) + row['k']) * calc_perdas(row)
-    return price
+    return price.clip(lower=tarifasegura_chao_simples*1000, upper=tarifasegura_tecto_simples*1000)
 
 def calc_cost(row):
     cost = calc_price(row) * row['curva_carga'] + (tar * row['curva_carga'] * 1000)
     return cost
 
-ezu = pd.read_csv('data/ezu/20230927132640_2023-07-30_2023-08-06_12448.csv', encoding="ISO-8859-1", skiprows=3,
+ezu = pd.read_csv('data/ezu/20231002173951_2023-08-30_2023-09-29_32083.csv', encoding="ISO-8859-1", skiprows=3,
                   skipfooter=9, delimiter=';', quotechar='"', engine='python', decimal=',')
 
 ezu_df = pd.DataFrame(
@@ -72,7 +72,7 @@ for index, row in ezu.iterrows():
 # print(calc_perdas(ezu_df.loc['2023-07-30 00:00':'2023-07-30 02:00']))
 
 
-ezu_slice = ezu_df.loc['2023-07-30 00:00':'2023-08-07 00:00']
+ezu_slice = ezu_df.loc['2023-08-30 00:00':'2023-09-30 00:00']
 
 print("Consumo :", '{:.0f}'.format(ezu_slice.curva_carga.sum()*1000))
 print("Custo :", '{:.2f}'.format(calc_cost(ezu_slice).sum()))
