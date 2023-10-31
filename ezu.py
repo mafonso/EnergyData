@@ -4,8 +4,8 @@ from datetime import datetime, time, timedelta
 
 import main
 
-tarifasegura_tecto_simples = 133
-tarifasegura_chao_simples = 72
+tarifasegura_tecto_simples = 140
+tarifasegura_chao_simples = 80
 tar = -0.0121 * 1000
 
 
