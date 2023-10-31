@@ -1,3 +1,4 @@
+import argparse
 import pandas as pd
 from datetime import datetime, time, timedelta
 
@@ -17,7 +18,7 @@ def calc_cgs(row):
         'desvio_ren']) / row['consumo_global']
     return cgs
 
-def calc_price(row):
+def calc_price(row): 
     ref_price = row['preco_omie'].clip(lower=tarifasegura_chao_simples, upper=tarifasegura_tecto_simples)
     price = (ref_price + row['k'] + calc_cgs(row)) * calc_perdas(row) + tar
     return price
@@ -26,8 +27,11 @@ def calc_cost(row):
     cost = calc_price(row) * row['curva_carga']
     return cost
 
+parser = argparse.ArgumentParser("ezu")
+parser.add_argument("filename", help="The csv file containing the detailed Ezu price report")
+args = parser.parse_args()
 
-ezu = pd.read_csv('data/ezu/20231002173951_2023-08-30_2023-09-29_32083.csv', encoding="ISO-8859-1", skiprows=3,
+ezu = pd.read_csv(args.filename, encoding="ISO-8859-1", skiprows=3,
                   skipfooter=9, delimiter=';', quotechar='"', engine='python', decimal=',')
 
 ezu_df = pd.DataFrame(
